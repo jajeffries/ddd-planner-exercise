@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 using Planner;
 
 namespace planner
@@ -8,11 +10,17 @@ namespace planner
     {
         private readonly ChatDao chatDao;
         private readonly HttpContext httpContext;
+        private readonly UserDao userDao;
 
-        public ChatService(HttpContext httpContext, ChatDao chatDao)
+        public ChatService(HttpContext httpContext, ChatDao chatDao) : this(httpContext, chatDao, null)
+        {
+        }
+
+        public ChatService(HttpContext httpContext, ChatDao chatDao, UserDao userDao)
         {
             this.httpContext = httpContext;
             this.chatDao = chatDao;
+            this.userDao = userDao;
         }
 
         public Guid NewChat(User user)
@@ -26,7 +34,7 @@ namespace planner
             }
             else
             {
-                throw new Exception("User does not have permission to add a chat");
+                throw new Exception("User does not have permission to add a user");
             }
         }
 
@@ -58,16 +66,47 @@ namespace planner
             }
             else
             {
-                throw new Exception("User does not have permission to add a discussion");
+                throw new Exception("User does not have permission to add a discussion.");
             }
         }
 
         public void AddCommentToThread(Guid threadId, Guid chatId, string message, string username)
         {
-            var chat = chatDao.GetChatById(chatId);
-            var thread = chat.Threads.First(t => t.ThreadId.Equals(threadId));
-            thread.Comments.Add(new Comment(username, message));
-            chatDao.SaveChat(chat);
+            var user = userDao.GetUserByUsername(username);
+
+            if (user.IsAuthenticated() && user.HasPermission(Permission.AddMessage))
+            {
+                var chat = chatDao.GetChatById(chatId);
+                var thread = chat.Threads.First(t => t.ThreadId.Equals(threadId));
+                thread.Comments.Add(new Comment(username, message));
+                chatDao.SaveChat(chat);
+            }
+            else
+            {
+                throw new Exception("User doesn't have permission to post comments.");
+            }
+        }
+    }
+
+    public class UserDao
+    {
+        private readonly string FilePath;
+
+        public UserDao()
+        {
+            this.FilePath = Directory.GetCurrentDirectory();
+        }
+
+        public User GetUserByUsername(string username)
+        {
+            var input = File.ReadAllText($"{FilePath}\\{username}.json");
+            return JsonConvert.DeserializeObject<User>(input);
+        }
+
+        public void SaveUser(User user)
+        {
+            var output = JsonConvert.SerializeObject(user);
+            File.WriteAllText($"{FilePath}\\{user.Username}.json", output);
         }
     }
 }

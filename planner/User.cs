@@ -1,19 +1,27 @@
-﻿namespace Planner
+﻿using Newtonsoft.Json;
+
+namespace Planner
 {
     public class User
     {
         public string Username { get; set; }
-        private readonly Role role;
-        private bool IsLoggedIn = false;
+        public readonly Role Role;
+        public bool IsLoggedIn = false;
 
         public User(Role role) : this(string.Empty, role)
         {
         }
 
-        public User(string username, Role role)
+        public User(string username, Role role) : this(username, role, false)
+        {
+        }
+
+        [JsonConstructor]
+        public User(string username, Role role, bool isLoggedIn)
         {
             Username = username;
-            this.role = role;
+            Role = role;
+            IsLoggedIn = isLoggedIn;
         }
 
         public bool IsAuthenticated()
@@ -28,7 +36,7 @@
 
         public bool HasPermission(Permission permission)
         {
-            return this.role.AllowedTo(permission);
+            return this.Role.AllowedTo(permission);
         }
     }
 }

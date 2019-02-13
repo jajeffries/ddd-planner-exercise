@@ -5,16 +5,16 @@ namespace Planner
 {
     public class Role
     {
-        private readonly IEnumerable<Permission> permissions;
+        public readonly IEnumerable<Permission> Permissions;
 
         public Role(IEnumerable<Permission> permissions)
         {
-            this.permissions = permissions;
+            this.Permissions = permissions;
         }
 
         public bool AllowedTo(Permission permission)
         {
-            return this.permissions.Any(p => p == permission);
+            return this.Permissions.Any(p => p == permission);
         }
     }
 }

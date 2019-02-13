@@ -14,7 +14,7 @@ namespace Tests
             var user = new User("TestUser", role);
             user.Login();
             var chatDao = new ChatDao();
-            var chatService = new ChatService(new HttpContext(), chatDao);
+            var chatService = new ChatService(new HttpContext(), chatDao, new UserDao());
             var chatId = chatService.NewChat(user);
             var chat = chatDao.GetChatById(chatId);
             Assert.That(chat.CreatedBy, Is.EqualTo(user.Username));
@@ -28,7 +28,7 @@ namespace Tests
             user.Login();
             var chatDao = new ChatDao();
             var httpContext = new HttpContext();
-            var chatService = new ChatService(httpContext, chatDao);
+            var chatService = new ChatService(httpContext, chatDao, new UserDao());
             var chatId = chatService.NewChat(user);
 
             const string title = "A new thread";
@@ -57,9 +57,10 @@ namespace Tests
 
             var user = new User("TestUser", role);
             user.Login();
+
             var chatDao = new ChatDao();
             var httpContext = new HttpContext();
-            var chatService = new ChatService(httpContext, chatDao);
+            var chatService = new ChatService(httpContext, chatDao, new UserDao());
             var chatId = chatService.NewChat(user);
 
             const string title = "A new thread";
@@ -72,6 +73,12 @@ namespace Tests
 
             var dev1 = new User("JaneDoe", role);
             var dev2 = new User("JohnDoe", role);
+            dev1.Login();
+            dev2.Login();
+
+            var userDao = new UserDao();
+            userDao.SaveUser(dev1);
+            userDao.SaveUser(dev2);
 
             chatService.AddCommentToThread(thread.ThreadId, chatId, "Hello, world!", dev1.Username);
             chatService.AddCommentToThread(thread.ThreadId, chatId, "Foo, bar, baz.", dev2.Username);
@@ -84,7 +91,6 @@ namespace Tests
             Assert.That(comments[0].Message, Is.EqualTo("Hello, world!"));
             Assert.That(comments[1].Username, Is.EqualTo("JohnDoe"));
             Assert.That(comments[1].Message, Is.EqualTo("Foo, bar, baz."));
-
         }
     }
 }
