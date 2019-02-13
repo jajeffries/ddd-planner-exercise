@@ -8,6 +8,7 @@
         UpdateTaskDetails,
         CreateChat,
         DeleteThread,
-        AddMessage
+        AddMessage,
+        ChangeUserDetails
     }
 }

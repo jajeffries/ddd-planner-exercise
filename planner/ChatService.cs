@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
 using Planner;
 
 namespace planner
@@ -93,7 +92,6 @@ namespace planner
         {
             if (user.IsAuthenticated() && user.HasPermission(Permission.DeleteThread))
             {
-
                 var chat = chatDao.GetChatById(chatId);
                 var thread = chat.Threads.First(t => t.ThreadId.Equals(threadId));
                 chat.Threads.Remove(thread);

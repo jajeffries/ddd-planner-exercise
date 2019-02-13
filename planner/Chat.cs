@@ -8,7 +8,6 @@ namespace planner
         public Guid Id { get; }
         public List<SoAgileThread> Threads { get; set; }
         public DateTime PostDate { get; }
-
         public string CreatedBy;
 
         public Chat(Guid id, string createdBy)

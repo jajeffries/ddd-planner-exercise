@@ -5,20 +5,28 @@ namespace Planner
     public class User
     {
         public string Username { get; set; }
-        public readonly Role Role;
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public bool IsLoggedIn = false;
+        public readonly Role Role;
 
-        public User(Role role) : this(string.Empty, role)
+        public User(Role role) : this(string.Empty, string.Empty, string.Empty, role, false)
         {
         }
 
-        public User(string username, Role role) : this(username, role, false)
+        public User(string username, Role role) : this(string.Empty, string.Empty, username, role, false)
+        {
+        }
+
+        public User(string firstName, string lastName, string username, Role role) : this(firstName, lastName, username, role, false)
         {
         }
 
         [JsonConstructor]
-        public User(string username, Role role, bool isLoggedIn)
+        public User(string firstName, string lastName, string username, Role role, bool isLoggedIn)
         {
+            FirstName = firstName;
+            LastName = lastName;
             Username = username;
             Role = role;
             IsLoggedIn = isLoggedIn;
