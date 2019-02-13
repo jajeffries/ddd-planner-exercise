@@ -5,6 +5,8 @@
         UpdateTicketStatus,
         AssignSprint,
         RemoveFromIteration,
-        UpdateTaskDetails
+        UpdateTaskDetails,
+        CreateChat,
+        CreateThread
     }
 }

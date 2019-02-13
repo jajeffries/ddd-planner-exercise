@@ -2,11 +2,17 @@
 {
     public class User
     {
+        public string Username { get; set; }
         private readonly Role role;
         private bool IsLoggedIn = false;
 
-        public User(Role role)
+        public User(Role role) : this(string.Empty, role)
         {
+        }
+
+        public User(string username, Role role)
+        {
+            Username = username;
             this.role = role;
         }
 
