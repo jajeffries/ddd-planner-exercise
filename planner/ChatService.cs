@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using Planner;
 
 namespace planner
@@ -32,7 +33,7 @@ namespace planner
             }
             else
             {
-                throw new Exception("User does not have permission to add a user");
+                throw new Exception("User does not have permission to add a chat");
             }
         }
 
@@ -42,20 +43,23 @@ namespace planner
             {
                 throw new Exception("User can't be null");
             }
+
             if (string.IsNullOrEmpty(username))
             {
                 throw new Exception("Username can't be null or empty");
             }
+
             if (string.IsNullOrEmpty(title) || title.Length > 250)
             {
                 throw new Exception("Invalid title length");
             }
+
             if (string.IsNullOrEmpty(message) || message.Length > 1000)
             {
                 throw new Exception("Invalid message length");
             }
 
-            if (user.IsAuthenticated() && user.HasPermission(Permission.CreateThread))
+            if (user.IsAuthenticated() && user.HasPermission(Permission.DeleteThread))
             {
                 var chat = chatDao.GetChatById(chatId);
                 chat.Threads.Add(new SoAgileThread(username, title, message));
@@ -82,6 +86,22 @@ namespace planner
             else
             {
                 throw new Exception("User doesn't have permission to post comments.");
+            }
+        }
+
+        public void DeleteThread(User user, Guid chatId, Guid threadId)
+        {
+            if (user.IsAuthenticated() && user.HasPermission(Permission.DeleteThread))
+            {
+
+                var chat = chatDao.GetChatById(chatId);
+                var thread = chat.Threads.First(t => t.ThreadId.Equals(threadId));
+                chat.Threads.Remove(thread);
+                chatDao.SaveChat(chat);
+            }
+            else
+            {
+                throw new Exception("User doesn't have permission to remove threads.");
             }
         }
     }

@@ -7,7 +7,7 @@
         RemoveFromIteration,
         UpdateTaskDetails,
         CreateChat,
-        CreateThread,
+        DeleteThread,
         AddMessage
     }
 }
