@@ -50,6 +50,17 @@ namespace Planner
             }
             currentSprint.Tasks.Add(ticket);
         }
+
+        public void UpdateTicketWithUser(Ticket ticket, User user)
+        {
+            var theTicket = GetTaskById(ticket.TicketId);
+            theTicket.Users.Add(user);
+        }
+
+        public Ticket GetTaskById(Guid id)
+        {
+            return tickets.First(t => t.Key.Equals(id)).Value;
+        }
     }
 }
 
