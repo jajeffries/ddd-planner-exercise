@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Planner;
 
 namespace planner
@@ -59,6 +60,14 @@ namespace planner
             {
                 throw new Exception("User does not have permission to add a discussion");
             }
+        }
+
+        public void AddCommentToThread(Guid threadId, Guid chatId, string message, string username)
+        {
+            var chat = chatDao.GetChatById(chatId);
+            var thread = chat.Threads.First(t => t.ThreadId.Equals(threadId));
+            thread.Comments.Add(new Comment(username, message));
+            chatDao.SaveChat(chat);
         }
     }
 }

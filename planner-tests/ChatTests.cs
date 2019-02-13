@@ -10,7 +10,7 @@ namespace Tests
         [Test]
         public void TestAddingChat()
         {
-            var role = new Role(new[] {Permission.CreateChat });
+            var role = new Role(new[] {Permission.CreateChat});
             var user = new User("TestUser", role);
             user.Login();
             var chatDao = new ChatDao();
@@ -23,7 +23,7 @@ namespace Tests
         [Test]
         public void TestAddingThreadToChat()
         {
-            var role = new Role(new[] { Permission.CreateChat, Permission.CreateThread });
+            var role = new Role(new[] {Permission.CreateChat, Permission.CreateThread});
             var user = new User("TestUser", role);
             user.Login();
             var chatDao = new ChatDao();
@@ -43,6 +43,48 @@ namespace Tests
             Assert.That(chat.Threads.First().Title, Is.EqualTo(title));
             Assert.That(chat.Threads.First().Message, Is.EqualTo(message));
             Assert.That(httpContext.Path, Is.EqualTo($"/{chatId}/threads/"));
+        }
+
+        [Test]
+        public void TestAddingCommentToThread()
+        {
+            var role = new Role(new[]
+            {
+                Permission.CreateChat,
+                Permission.CreateThread,
+                Permission.AddMessage
+            });
+
+            var user = new User("TestUser", role);
+            user.Login();
+            var chatDao = new ChatDao();
+            var httpContext = new HttpContext();
+            var chatService = new ChatService(httpContext, chatDao);
+            var chatId = chatService.NewChat(user);
+
+            const string title = "A new thread";
+            const string message = "Let's discuss things...";
+
+            chatService.AddThread(chatId, user, user.Username, title, message);
+
+            var chat = chatDao.GetChatById(chatId);
+            var thread = chat.Threads.First();
+
+            var dev1 = new User("JaneDoe", role);
+            var dev2 = new User("JohnDoe", role);
+
+            chatService.AddCommentToThread(thread.ThreadId, chatId, "Hello, world!", dev1.Username);
+            chatService.AddCommentToThread(thread.ThreadId, chatId, "Foo, bar, baz.", dev2.Username);
+
+            chat = chatDao.GetChatById(chatId);
+
+            var comments = chat.Threads.First().Comments;
+
+            Assert.That(comments[0].Username, Is.EqualTo("JaneDoe"));
+            Assert.That(comments[0].Message, Is.EqualTo("Hello, world!"));
+            Assert.That(comments[1].Username, Is.EqualTo("JohnDoe"));
+            Assert.That(comments[1].Message, Is.EqualTo("Foo, bar, baz."));
+
         }
     }
 }
