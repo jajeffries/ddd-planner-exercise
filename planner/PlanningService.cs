@@ -42,7 +42,6 @@ namespace Planner
         {
             var currentSprint = sprints.First(iteration => iteration.IsStarted);
             ticket.IterationPlanned = currentSprint;
-            currentSprint.AddTask(ticket, this.httpContext);
             var iterationPointsUsed  = currentSprint.Tasks.Sum(t => t.Points);
             if (iterationPointsUsed + ticket.Points > currentSprint.SprintSize)
             {
@@ -60,6 +59,25 @@ namespace Planner
         public Ticket GetTaskById(Guid id)
         {
             return tickets.First(t => t.Key.Equals(id)).Value;
+        }
+
+        public void DeleteTicket(Ticket ticket, User user)
+        {
+            if (user.IsAuthenticated() && user.HasPermission(Permission.RemoveFromIteration))
+            {
+                var currentSprint = GetCurrentSprint();
+                currentSprint.Tasks.Remove(ticket);
+                ticket.IterationPlanned = null;
+            }
+            else
+            {
+                throw new Exception("Only product owners can remove tickets from the current sprint");
+            }
+        }
+
+        public Sprint GetCurrentSprint()
+        {
+            return sprints.First(iteration => iteration.IsStarted);
         }
     }
 }

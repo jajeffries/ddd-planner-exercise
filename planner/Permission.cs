@@ -3,6 +3,8 @@
     public enum Permission
     {
         UpdateTicketStatus,
-        AssignSprint
+        AssignSprint,
+        RemoveFromIteration,
+        UpdateTaskDetails
     }
 }
