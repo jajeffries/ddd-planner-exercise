@@ -19,7 +19,7 @@ namespace Planner
             Users = new List<User>();
         }
 
-        public void AddEstimate(int points)
+        public void AddPlannedEffort(int points)
         {
             Points = points;
         }

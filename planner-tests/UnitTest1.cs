@@ -43,13 +43,13 @@ namespace Tests
             var sprint = planningService.CreateSprint(10);
             sprint.Start();
             var ticket1 = planningService.NewTicket();
-            ticket1.AddEstimate(3);
+            ticket1.AddPlannedEffort(3);
             planningService.AssignToCurrentIteration(user, ticket1);
             var ticket2 = planningService.NewTicket();
-            ticket2.AddEstimate(3);
+            ticket2.AddPlannedEffort(3);
             planningService.AssignToCurrentIteration(user, ticket2);
             var ticket3 = planningService.NewTicket();
-            ticket3.AddEstimate(5);
+            ticket3.AddPlannedEffort(5);
             planningService.AssignToCurrentIteration(user, ticket3);
             Assert.That(httpContext.StatusCode, Is.EqualTo(302));
             Assert.That(httpContext.Path, Is.EqualTo("/iterations/"));
@@ -66,13 +66,13 @@ namespace Tests
             var sprint = planningService.CreateSprint(10);
             sprint.Start();
             var ticket1 = planningService.NewTicket();
-            ticket1.AddEstimate(3);
+            ticket1.AddPlannedEffort(3);
             planningService.AssignToCurrentIteration(user, ticket1);
             var ticket2 = planningService.NewTicket();
-            ticket2.AddEstimate(3);
+            ticket2.AddPlannedEffort(3);
             planningService.AssignToCurrentIteration(user, ticket2);
             var ticket3 = planningService.NewTicket();
-            ticket3.AddEstimate(5);
+            ticket3.AddPlannedEffort(5);
             planningService.AssignToCurrentIteration(user, ticket3);
             
             var team1 = new User(role);
@@ -98,13 +98,13 @@ namespace Tests
             var sprint = planningService.CreateSprint(10);
             sprint.Start();
             var ticket1 = planningService.NewTicket();
-            ticket1.AddEstimate(3);
+            ticket1.AddPlannedEffort(3);
             planningService.AssignToCurrentIteration(user, ticket1);
             var ticket2 = planningService.NewTicket();
-            ticket2.AddEstimate(3);
+            ticket2.AddPlannedEffort(3);
             planningService.AssignToCurrentIteration(user, ticket2);
             var ticket3 = planningService.NewTicket();
-            ticket3.AddEstimate(5);
+            ticket3.AddPlannedEffort(5);
             planningService.AssignToCurrentIteration(user, ticket3);
 
             planningService.DeleteTicket(ticket1, user);
