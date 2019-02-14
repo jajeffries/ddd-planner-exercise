@@ -14,8 +14,8 @@ namespace Tests
             user.Login();
             var planningService = new PlanningService(new HttpContext());
             var ticket = planningService.NewTicket();
-            planningService.UpdateTicketStatus(user, ticket.TicketId, TicketStatus.InProgress);
-            Assert.That(ticket.Status, Is.EqualTo(TicketStatus.InProgress));
+            planningService.UpdateTicketStatus(user, ticket.TicketId, TaskStatus.InProgress);
+            Assert.That(ticket.Status, Is.EqualTo(TaskStatus.InProgress));
         }
 
         [Test]

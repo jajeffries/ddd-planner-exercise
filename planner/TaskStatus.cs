@@ -1,6 +1,6 @@
 ﻿namespace Planner
 {
-    public enum TicketStatus
+    public enum TaskStatus
     {
         New,
         InProgress,

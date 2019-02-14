@@ -6,7 +6,7 @@ namespace Planner
 {
     public class PlanningService
     {
-    	private readonly Dictionary<Guid, Ticket> tickets = new Dictionary<Guid, Ticket>();
+    	private readonly Dictionary<Guid, Task> tickets = new Dictionary<Guid, Task>();
         private readonly List<Sprint> sprints = new List<Sprint>();
         private readonly HttpContext httpContext;
 
@@ -15,15 +15,15 @@ namespace Planner
             this.httpContext = httpContext;
         }
 
-    	public Ticket NewTicket()
+    	public Task NewTicket()
     	{
     		var ticketId = Guid.NewGuid();
-    		var ticket = new Ticket(ticketId);
+    		var ticket = new Task(ticketId);
     		tickets.Add(ticketId, ticket);
     		return ticket;
     	}
 
-    	public void UpdateTicketStatus(User user, Guid ticketId, TicketStatus status)
+    	public void UpdateTicketStatus(User user, Guid ticketId, TaskStatus status)
     	{
             if(user.IsAuthenticated() && user.HasPermission(Permission.UpdateTicketStatus))
             {  
@@ -38,7 +38,7 @@ namespace Planner
             return sprint;
         }
 
-        public void AssignToCurrentIteration(User user, Ticket ticket)
+        public void AssignToCurrentIteration(User user, Task ticket)
         {
             var currentSprint = sprints.First(iteration => iteration.IsStarted);
             ticket.IterationPlanned = currentSprint;
@@ -50,18 +50,18 @@ namespace Planner
             currentSprint.Tasks.Add(ticket);
         }
 
-        public void UpdateTicketWithUser(Ticket ticket, User user)
+        public void UpdateTicketWithUser(Task ticket, User user)
         {
             var theTicket = GetTaskById(ticket.TicketId);
             theTicket.Users.Add(user);
         }
 
-        public Ticket GetTaskById(Guid id)
+        public Task GetTaskById(Guid id)
         {
             return tickets.First(t => t.Key.Equals(id)).Value;
         }
 
-        public void DeleteTicket(Ticket ticket, User user)
+        public void DeleteTicket(Task ticket, User user)
         {
             if (user.IsAuthenticated() && user.HasPermission(Permission.RemoveFromIteration))
             {

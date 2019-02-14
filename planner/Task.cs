@@ -3,19 +3,19 @@ using System.Collections.Generic;
 
 namespace Planner
 {
-    public class Ticket
+    public class Task
     {
         public Guid TicketId { get; }
-        public TicketStatus Status { get; set; }
+        public TaskStatus Status { get; set; }
         public int Points { get; private set; }
 
         public Sprint IterationPlanned { get; set; }
         public List<User> Users { get; set; }
 
-        public Ticket(Guid ticketId)
+        public Task(Guid ticketId)
         {
             TicketId = ticketId;
-            Status = TicketStatus.New;
+            Status = TaskStatus.New;
             Users = new List<User>();
         }
 

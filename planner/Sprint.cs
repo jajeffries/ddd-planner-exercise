@@ -6,7 +6,7 @@ namespace Planner
     {
         public bool IsStarted { get; private set; } = false;
 
-        public List<Ticket> Tasks = new List<Ticket>();
+        public List<Task> Tasks = new List<Task>();
         public int SprintSize;
 
         public Sprint(int size)
@@ -19,7 +19,7 @@ namespace Planner
             IsStarted = true;
         }
 
-        public void AddTask(Ticket task, HttpContext httpContext)
+        public void AddTask(Task task, HttpContext httpContext)
         {
             Tasks.Add(task);
         }
