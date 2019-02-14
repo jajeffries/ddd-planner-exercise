@@ -61,7 +61,7 @@ namespace planner
             if (user.IsAuthenticated() && user.HasPermission(Permission.DeleteThread))
             {
                 var chat = chatDao.GetChatById(chatId);
-                chat.Threads.Add(new SoAgileThread(username, title, message));
+                chat.Threads.Add(new Thread(username, title, message));
                 chatDao.SaveChat(chat);
                 httpContext.Redirect(302, $"/{chatId}/threads/");
             }

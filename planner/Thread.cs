@@ -3,8 +3,7 @@ using System.Collections.Generic;
 
 namespace planner
 {
-    // We wanted to use "Thread" but there was a naming conflict
-    public class SoAgileThread
+    public class Thread
     {
         public string Username { get; }
         public string Title { get; }
@@ -13,7 +12,7 @@ namespace planner
         public Guid ThreadId { get; set; }
         public List<Comment> Comments { get; set; }
 
-        public SoAgileThread(string username, string title, string message)
+        public Thread(string username, string title, string message)
         {
             ThreadId = Guid.NewGuid();
             Username = username;

@@ -6,7 +6,7 @@ namespace planner
     public class Chat
     {
         public Guid Id { get; }
-        public List<SoAgileThread> Threads { get; set; }
+        public List<Thread> Threads { get; set; }
         public DateTime PostDate { get; }
         public string CreatedBy;
 
@@ -15,7 +15,7 @@ namespace planner
             Id = id;
             CreatedBy = createdBy;
             PostDate = DateTime.Now;
-            Threads = new List<SoAgileThread>();
+            Threads = new List<Thread>();
         }
     }
 }
